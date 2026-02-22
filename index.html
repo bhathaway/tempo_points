@@ -118,12 +118,6 @@
       margin-top: 1.5rem;
     }
 
-    .ratio {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 0.75rem;
-    }
-
     .tempo-list {
       list-style: none;
       padding: 0;
@@ -131,6 +125,8 @@
     }
 
     .tempo-list li {
+      display: flex;
+      align-items: baseline;
       padding: 0.5rem 0.75rem;
       font-size: 1.05rem;
       font-variant-numeric: tabular-nums;
@@ -142,11 +138,20 @@
     }
 
     .tempo-list li span.index {
-      display: inline-block;
       width: 2rem;
+      flex-shrink: 0;
       color: #999;
       text-align: right;
       margin-right: 0.5rem;
+    }
+
+    .tempo-list li span.bpm {
+      flex: 1;
+    }
+
+    .tempo-list li span.ratio {
+      font-size: 0.85rem;
+      color: #888;
     }
   </style>
 </head>
@@ -213,7 +218,6 @@
 
       var n = steps + 1;
       var ratio = Math.pow(endBpm / startBpm, 1 / n);
-      var ratioPercent = ((ratio - 1) * 100).toFixed(1);
 
       var tempos = [];
       for (var i = 0; i <= n; i++) {
@@ -221,10 +225,15 @@
       }
 
       var html = '<div class="results">';
-      html += '<p class="ratio">Avg ratio: ~' + ratioPercent + '% per step</p>';
       html += '<ol class="tempo-list">';
       for (var i = 0; i < tempos.length; i++) {
-        html += '<li><span class="index">' + (i + 1) + '.</span>' + tempos[i] + ' bpm</li>';
+        html += '<li><span class="index">' + (i + 1) + '.</span>';
+        html += '<span class="bpm">' + tempos[i] + ' bpm</span>';
+        if (i > 0) {
+          var stepRatio = ((tempos[i] / tempos[i - 1] - 1) * 100).toFixed(1);
+          html += '<span class="ratio">+' + stepRatio + '%</span>';
+        }
+        html += '</li>';
       }
       html += '</ol>';
       html += '</div>';
