@@ -272,9 +272,24 @@
       output.innerHTML = html;
     }
 
+    var inputs = ['startBpm', 'endBpm', 'steps'];
+
+    function save() {
+      inputs.forEach(function(id) {
+        localStorage.setItem('tp_' + id, document.getElementById(id).value);
+      });
+    }
+
+    function restore() {
+      inputs.forEach(function(id) {
+        var saved = localStorage.getItem('tp_' + id);
+        if (saved !== null) document.getElementById(id).value = saved;
+      });
+    }
+
     // Live update on any input change
     document.querySelectorAll('input[type="number"]').forEach(function(input) {
-      input.addEventListener('input', generate);
+      input.addEventListener('input', function() { save(); generate(); });
     });
 
     // +/- button handling
@@ -286,11 +301,13 @@
         var newVal = (parseInt(input.value, 10) || 0) + delta;
         if (!isNaN(min) && newVal < min) newVal = min;
         input.value = newVal;
+        save();
         generate();
       });
     });
 
-    // Generate on page load with defaults
+    // Restore saved state and generate
+    restore();
     generate();
   </script>
 </body>
