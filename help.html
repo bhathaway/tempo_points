@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tempo Points — Help</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      margin: 0;
+      padding: 1rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 2rem auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1rem;
+      color: #4a90d9;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      margin: 0 0 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    h2 {
+      margin: 1.5rem 0 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 0.75rem;
+      font-size: 0.95rem;
+      color: #444;
+    }
+
+    .contact {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .contact a {
+      color: #4a90d9;
+      text-decoration: none;
+    }
+
+    .contact a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">&larr; Back to Tempo Points</a>
+    <h1>Help</h1>
+
+    <h2>What is this?</h2>
+    <p>
+      Tempo Points is a practice tool for musicians. When working up a passage
+      to a target tempo, jumping straight from slow practice to full speed is
+      inefficient. This tool generates sensible intermediate tempo markings
+      between a start and end BPM.
+    </p>
+
+    <h2>How does it work?</h2>
+    <p>
+      Rather than stepping by a fixed number of BPM (which feels like bigger
+      jumps at lower tempos), Tempo Points uses a geometric progression &mdash;
+      each step increases by approximately the same <em>ratio</em>. This
+      matches how humans perceive tempo changes: going from 60 to 72 feels
+      like the same size jump as going from 100 to 120 (both are +20%).
+    </p>
+
+    <h2>Using the tool</h2>
+    <p>
+      Enter your starting tempo, target tempo, and how many intermediate steps
+      you want. Results update live as you type or use the +/&minus; buttons.
+      The percentage shown on each line is the ratio increase from the previous
+      tempo.
+    </p>
+
+    <div class="contact">
+      <p>
+        Created by <strong>YOUR NAME</strong><br>
+        <a href="mailto:your.email@example.com">your.email@example.com</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
