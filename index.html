@@ -45,40 +45,67 @@
       color: #555;
     }
 
-    input[type="number"] {
-      width: 100%;
+    .input-group {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .input-group input[type="number"] {
+      flex: 1;
+      min-width: 0;
       padding: 0.625rem 0.75rem;
       font-size: 1rem;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 0;
       appearance: textfield;
+      text-align: center;
     }
 
-    input[type="number"]:focus {
+    .input-group input[type="number"]:focus {
       outline: none;
       border-color: #4a90d9;
       box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.2);
+      z-index: 1;
+      position: relative;
     }
 
-    button {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
+    .input-group input[type="number"]::-webkit-inner-spin-button,
+    .input-group input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .step-btn {
+      width: 3rem;
+      flex-shrink: 0;
+      font-size: 1.25rem;
       font-weight: 600;
-      background: #4a90d9;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
+      background: #e8e8e8;
+      color: #333;
+      border: 1px solid #ccc;
       cursor: pointer;
-      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
     }
 
-    button:hover {
-      background: #3a7bc8;
+    .step-btn:hover {
+      background: #ddd;
     }
 
-    button:active {
-      background: #2e6ab0;
+    .step-btn:active {
+      background: #ccc;
+    }
+
+    .step-btn.minus {
+      border-radius: 6px 0 0 6px;
+      border-right: none;
+    }
+
+    .step-btn.plus {
+      border-radius: 0 6px 6px 0;
+      border-left: none;
     }
 
     .error {
@@ -129,33 +156,43 @@
 
     <div class="field">
       <label for="startBpm">Start BPM</label>
-      <input type="number" id="startBpm" value="60" min="1">
+      <div class="input-group">
+        <button type="button" class="step-btn minus" data-target="startBpm" data-delta="-1">&minus;</button>
+        <input type="number" id="startBpm" value="60" min="1">
+        <button type="button" class="step-btn plus" data-target="startBpm" data-delta="1">+</button>
+      </div>
     </div>
 
     <div class="field">
       <label for="endBpm">End BPM</label>
-      <input type="number" id="endBpm" value="120" min="1">
+      <div class="input-group">
+        <button type="button" class="step-btn minus" data-target="endBpm" data-delta="-1">&minus;</button>
+        <input type="number" id="endBpm" value="120" min="1">
+        <button type="button" class="step-btn plus" data-target="endBpm" data-delta="1">+</button>
+      </div>
     </div>
 
     <div class="field">
       <label for="steps">Intermediate steps</label>
-      <input type="number" id="steps" value="4" min="0">
+      <div class="input-group">
+        <button type="button" class="step-btn minus" data-target="steps" data-delta="-1">&minus;</button>
+        <input type="number" id="steps" value="4" min="0">
+        <button type="button" class="step-btn plus" data-target="steps" data-delta="1">+</button>
+      </div>
     </div>
-
-    <button id="generate">Generate</button>
 
     <div id="output"></div>
   </div>
 
   <script>
     function generate() {
-      const startBpm = parseInt(document.getElementById('startBpm').value, 10);
-      const endBpm = parseInt(document.getElementById('endBpm').value, 10);
-      const steps = parseInt(document.getElementById('steps').value, 10);
-      const output = document.getElementById('output');
+      var startBpm = parseInt(document.getElementById('startBpm').value, 10);
+      var endBpm = parseInt(document.getElementById('endBpm').value, 10);
+      var steps = parseInt(document.getElementById('steps').value, 10);
+      var output = document.getElementById('output');
 
       if (isNaN(startBpm) || isNaN(endBpm) || isNaN(steps)) {
-        output.innerHTML = '<p class="error">Please fill in all fields with valid numbers.</p>';
+        output.innerHTML = '';
         return;
       }
 
@@ -174,19 +211,19 @@
         return;
       }
 
-      const n = steps + 1;
-      const ratio = Math.pow(endBpm / startBpm, 1 / n);
-      const ratioPercent = ((ratio - 1) * 100).toFixed(1);
+      var n = steps + 1;
+      var ratio = Math.pow(endBpm / startBpm, 1 / n);
+      var ratioPercent = ((ratio - 1) * 100).toFixed(1);
 
-      const tempos = [];
-      for (let i = 0; i <= n; i++) {
+      var tempos = [];
+      for (var i = 0; i <= n; i++) {
         tempos.push(Math.round(startBpm * Math.pow(ratio, i)));
       }
 
-      let html = '<div class="results">';
+      var html = '<div class="results">';
       html += '<p class="ratio">Avg ratio: ~' + ratioPercent + '% per step</p>';
       html += '<ol class="tempo-list">';
-      for (let i = 0; i < tempos.length; i++) {
+      for (var i = 0; i < tempos.length; i++) {
         html += '<li><span class="index">' + (i + 1) + '.</span>' + tempos[i] + ' bpm</li>';
       }
       html += '</ol>';
@@ -195,13 +232,26 @@
       output.innerHTML = html;
     }
 
-    document.getElementById('generate').addEventListener('click', generate);
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        generate();
-      }
+    // Live update on any input change
+    document.querySelectorAll('input[type="number"]').forEach(function(input) {
+      input.addEventListener('input', generate);
     });
+
+    // +/- button handling
+    document.querySelectorAll('.step-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var input = document.getElementById(btn.dataset.target);
+        var delta = parseInt(btn.dataset.delta, 10);
+        var min = parseInt(input.min, 10);
+        var newVal = (parseInt(input.value, 10) || 0) + delta;
+        if (!isNaN(min) && newVal < min) newVal = min;
+        input.value = newVal;
+        generate();
+      });
+    });
+
+    // Generate on page load with defaults
+    generate();
   </script>
 </body>
 </html>
