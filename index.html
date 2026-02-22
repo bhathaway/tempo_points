@@ -27,10 +27,37 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    h1 {
+    .header {
+      display: flex;
+      align-items: center;
       margin: 0 0 1.5rem;
+    }
+
+    h1 {
+      margin: 0;
       font-size: 1.5rem;
       font-weight: 600;
+      flex: 1;
+    }
+
+    .help-link {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      border: 2px solid #999;
+      color: #999;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .help-link:hover {
+      border-color: #4a90d9;
+      color: #4a90d9;
     }
 
     .field {
@@ -157,7 +184,10 @@
 </head>
 <body>
   <div class="container">
-    <h1>Tempo Points</h1>
+    <div class="header">
+      <h1>Tempo Points</h1>
+      <a href="help.html" class="help-link" title="Help">?</a>
+    </div>
 
     <div class="field">
       <label for="startBpm">Start BPM</label>
